@@ -21,6 +21,7 @@ mayaMainWindowPtr = omui.MQtUtil.mainWindow()
 mayaMainWindow = shiboken2.wrapInstance(long(mayaMainWindowPtr), QWidget)
 
 
+
 def undo(func):
     @functools.wraps(func)
     def _undofunc(*args, **kwargs):
