@@ -7,23 +7,38 @@ import maya.cmds as mc
 
 
 def create_ctrl(shape, prefix):
+    colorId = 17
     if "_sec_" in str(prefix):
         scale = 0.6
         colorR =1
         colorG =0.165
         colorB =0.456
+        if "_L_" in str(prefix):
+            colorId = 4
+        elif "_R_" in str(prefix):
+            colorId = 18
+        elif "_M_" in str(prefix):
+            colorId = 25
+
     else:
         scale = 1
         colorR =1
         colorG =0.333
         colorB =0.125
+        if "_L_" in str(prefix):
+            colorId = 13
+        elif "_R_" in str(prefix):
+            colorId = 6
+        elif "_M_" in str(prefix):
+            colorId = 17
 
     shape = con_shape(shape, scale)
     ctrl = mc.rename(shape, "{}_ctrl".format(prefix))
     shape = mc.listRelatives(ctrl, s=True)[0]
     mc.setAttr("{}.overrideEnabled".format(shape), True)
-    mc.setAttr("{}.overrideRGBColors".format(shape), 1)
-    mc.setAttr("{}.overrideColorRGB".format(shape), colorR, colorG, colorB)
+    # mc.setAttr("{}.overrideRGBColors".format(shape), 1)
+    # mc.setAttr("{}.overrideColorRGB".format(shape), colorR, colorG, colorB)
+    mc.setAttr("{}.overrideColor".format(shape), colorId)
     jnt = mc.joint(n="{}_jnt".format(prefix))
     # mc.refresh()
     return ctrl, jnt
