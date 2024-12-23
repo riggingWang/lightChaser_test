@@ -1,0 +1,350 @@
+{
+  "NurbsMirrorcheckBox": [
+    "Mirror",
+    "镜像"
+  ],
+  "ArmorUpBtn": [
+    "ArmorUp",
+    "上盔甲"
+  ],
+  "Prefix_label": [
+    " Prefix :",
+    " 前缀 :"
+  ],
+  "ArmorArmleDrvtBtn": [
+    "Drive",
+    "驱动"
+  ],
+  "EditMesh_RefreshBtn": [
+    "Refresh",
+    "刷新"
+  ],
+  "nurbs_up_label": [
+    " Up",
+    " 向上轴"
+  ],
+  "guidelistUpdataBtn": [
+    "Refresh",
+    "刷新"
+  ],
+  "createArmletMirrorBtn": [
+    "Mirror Armlet Guide",
+    "镜像护腕引导"
+  ],
+  "pickCurveBtn": [
+    "Pick Curve",
+    "提取曲线"
+  ],
+  "nurbs_aim_z_radio": [
+    "Z",
+    "Z"
+  ],
+  "ArmorArmletBtn": [
+    "Armlet",
+    "护腕"
+  ],
+  "tool_copyWeightsBtn": [
+    "Copy Weights",
+    "拷贝权重"
+  ],
+  "L_radioButton": [
+    "L",
+    "左"
+  ],
+  "createShoulderBtn": [
+    "Create Shoulder Guide",
+    "创建内肩甲引导"
+  ],
+  "ArmorUpDrvBtn": [
+    "Drive",
+    "驱动"
+  ],
+  "AddPointsToolBtn": [
+    "Add Points Tool",
+    "添加点"
+  ],
+  "CurveLoadingLabel": [
+    " Nurbs Curve:",
+    " 曲线们 :"
+  ],
+  "ArmorDnBtn": [
+    "ArmorDn",
+    "普通FKIK链"
+  ],
+  "spansUAddSubLabel": [
+    " Spans U:",
+    " 密度 U:"
+  ],
+  "aim_x_radio": [
+    "X",
+    "X"
+  ],
+  "spansUSubBtn": [
+    "-",
+    "减"
+  ],
+  "spansVSubBtn": [
+    "-",
+    "减"
+  ],
+  "ArmorShoulderBtn": [
+    "Shoulder",
+    "内肩甲"
+  ],
+  "matchCurveProgressBar": [
+    "Match Curve Guide : %p%",
+    "匹配引导线 : %p%"
+  ],
+  "nurbs_aim_x_radio": [
+    "X",
+    "X"
+  ],
+  "up_y_radio": [
+    "Y",
+    "Y"
+  ],
+  "aim_y_radio": [
+    "Y",
+    "Y"
+  ],
+  "nurbsGeoLoadingBtn": [
+    " loading <<",
+    " 载入 <<"
+  ],
+  "aim_label": [
+    " Aim",
+    " 目标轴"
+  ],
+  "up_z_radio": [
+    "Z",
+    "Z"
+  ],
+  "nurbsCreateGuideBtn": [
+    "Create Guide",
+    "创建引导"
+  ],
+  "nurbs_up_y_radio": [
+    "Y",
+    "Y"
+  ],
+  "CurveLoadingBtn": [
+    " loading <<",
+    " 载入 <<"
+  ],
+  "ReverseCurveBtn": [
+    "Reverse Curve",
+    "反转"
+  ],
+  "AxialLoadingBtn": [
+    " loading <<",
+    " 载入 <<"
+  ],
+  "guidelistLabel": [
+    "Guide List :",
+    "引导列表 :"
+  ],
+  "aim_z_radio": [
+    "Z",
+    "Z"
+  ],
+  "insertKnotToolBtn": [
+    "Insert Points Tool",
+    "插入点"
+  ],
+  "ArmorPauldronsDrvBtn": [
+    "Drive",
+    "驱动"
+  ],
+  "EditMesh_EditOverProgressBar": [
+    "Transferring :    %p%",
+    "生效中 :    %p%"
+  ],
+  "EditMesh_EditOverBtn": [
+    "Transfer Blend",
+    "转化 Blend"
+  ],
+  "nurbsMatchCurveBtn": [
+    "Match Curve Guide",
+    "匹配引导线"
+  ],
+  "nurbs_aim_label": [
+    " Aim",
+    " 目标轴"
+  ],
+  "nurbs_up_z_radio": [
+    "Z",
+    "Z"
+  ],
+  "createPauldronsMirrorBtn": [
+    "Mirror Pauldrons Guide",
+    "镜像外肩甲引导"
+  ],
+  "ArmorPauldronsBtn": [
+    "Pauldrons",
+    "外肩甲"
+  ],
+  "label_4": [
+    "Shoulder Guide :",
+    "肩膀内肩甲引导 :"
+  ],
+  "label_5": [
+    "Edit Curve :",
+    "编辑曲线:"
+  ],
+  "label_6": [
+    "Pauldrons Guide :",
+    "外肩甲引导 :"
+  ],
+  "label_7": [
+    "Armlet Guide :",
+    "护腕引导 :"
+  ],
+  "label_3": [
+    "Create Guide :",
+    "创建引导 :"
+  ],
+  "spansVAddBtn": [
+    "+",
+    "加"
+  ],
+  "AxialLoadingLabel": [
+    " Up Object:",
+    " 向上轴对象:"
+  ],
+  "up_label": [
+    " Up",
+    " 向上轴"
+  ],
+  "nurbsImportGuideBtn": [
+    "Create Guide Mesh",
+    "创建引导模型"
+  ],
+  "ArmorShoulderDrvBtn": [
+    "Drive",
+    "驱动"
+  ],
+  "nurbs_aim_y_radio": [
+    "Y",
+    "Y"
+  ],
+  "ConvertCurveBtn": [
+    "Curve Convert Guide",
+    "曲线转换引导"
+  ],
+  "M_radioButton": [
+    "M",
+    "中"
+  ],
+  "label": [
+    "Nurbs Create Guide :",
+    "批量生成引导线:"
+  ],
+  "EditMesh_createMeshBtn": [
+    "Create Edit Mesh",
+    "创建编辑模型"
+  ],
+  "nurbs_up_x_radio": [
+    "X",
+    "X"
+  ],
+  "spansUAddBtn": [
+    "+",
+    "加"
+  ],
+  "ArmorDnDrvBtn": [
+    "Drive",
+    "驱动"
+  ],
+  "ArmorBodyDriveBtn": [
+    "Body Drive",
+    "身体驱动"
+  ],
+  "Armor_caocoa_label": [
+    "Caocao Armor Setup:",
+    "曹操盔甲设置:"
+  ],
+  "renameCurveBtn": [
+    "Rename Curve",
+    "重命名曲线"
+  ],
+  "Nurbs_Prefix_label": [
+    " Prefix :",
+    " 前缀 :"
+  ],
+  "R_radioButton": [
+    "R",
+    "右"
+  ],
+  "relaxCurveBtn": [
+    "Relax Curve",
+    "平滑"
+  ],
+  "createArmletBtn": [
+    "Create Armlet Guide",
+    "创建护腕引导"
+  ],
+  "up_x_radio": [
+    "X",
+    "X"
+  ],
+  "createShoulderMirrorBtn": [
+    "Mirror Shoulder Guide",
+    "镜像内肩甲引导"
+  ],
+  "ctrlScaleApplyBtn": [
+    "Ctrl Scale Apply",
+    "控制器缩放"
+  ],
+  "tool_copyBlendBtn": [
+    "Copy BlendShape",
+    "拷贝融合变形"
+  ],
+  "createPauldronsBtn": [
+    "Create Pauldrons Guide",
+    "创建外肩甲引导"
+  ],
+  "spansVAddSubLabel": [
+    " Spans V:",
+    " 密度 V:"
+  ],
+  "nurbsGeoLoadingLab": [
+    " Match Geo：",
+    " 匹配模型:"
+  ],
+    "DriveConvertToolBtn": [
+    "Anim to SDK Tool",
+    "动画曲线转驱动曲线"
+  ],
+    "sdkMirrorToolBtn": [
+    "SDK Mirror Tool",
+    "驱动镜像"
+  ],
+    "DriveIOToolBtn": [
+    "SDK IO Tool",
+    "驱动曲线导出导入"
+  ],
+    "angleDriveBtn": [
+    "Angle Drive",
+    "选3个IK控制器 驱动"
+  ],
+    "armorUpHZcheck": [
+    "horizontal ctrl",
+    "控制器 保持水平"
+  ],
+    "armorDnHZcheck": [
+    "horizontal ctrl",
+    "控制器 保持水平"
+  ],
+    "armorDn2HZcheck": [
+    "horizontal ctrl",
+    "控制器 保持水平"
+  ],
+    "ArmorDn2Btn": [
+    "ArmorDn",
+    "线性IK驱FKIK"
+  ],
+    "ArmorUpDrv2Btn": [
+    "Drive",
+    "驱动"
+  ]
+}
