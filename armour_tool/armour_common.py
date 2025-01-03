@@ -28,7 +28,7 @@ def undo(func):
 
 def wrap(control, target):
     mc.select(target, control)
-    mel.eval("CreateWrap;")
+    mel.eval('doWrapArgList "7" { "1","0","1", "2", "1", "1", "0", "0" };')
     history = mc.listHistory(target, pdo=1)
     wrap_array = []
     for i in history:
@@ -36,7 +36,7 @@ def wrap(control, target):
             wrap_array.append(i)
     wrap = wrap_array[0]
     baseGeo = mc.listConnections("{}.basePoints[0]".format(wrap))[0]
-    mc.refresh()
+    # mc.refresh()
     return wrap, baseGeo
 
 
