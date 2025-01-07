@@ -66,6 +66,7 @@ class armour_rig_ui(QMainWindow):
 
     def setupUi(self):
         self._language = "cn"
+        self._ui.tabWidget.setCurrentIndex(0)
         self._ui.matchCurveProgressBar.hide()
         self._ui.EditMesh_EditOverProgressBar.hide()
 

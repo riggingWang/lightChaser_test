@@ -36,7 +36,6 @@ def wrap(control, target):
             wrap_array.append(i)
     wrap = wrap_array[0]
     baseGeo = mc.listConnections("{}.basePoints[0]".format(wrap))[0]
-    # mc.refresh()
     return wrap, baseGeo
 
 
@@ -219,9 +218,9 @@ class EditMesh():
 
     @undo
     def createEditMesh(self, prefix):
-        crv_grp = "{}_armor_tri_IkCrv_grp".format(prefix)
+        self.crv_grp = "{}_armor_tri_IkCrv_grp".format(prefix)
 
-        child = getChlidren(crv_grp)
+        child = getChlidren(self.crv_grp)
         if len(child) == 0:
             return
         TEMP_edit_grp = mc.createNode("transform", n="TEMP_{}_edit_grp".format(prefix))
@@ -275,6 +274,7 @@ class EditMesh():
             copyWeights(editMesh, i)
             self.copy_blend.copy_blendShape(editMesh, i)
             iter += percent
+            mc.setAttr("{}.inheritsTransform".format(i), False)
             progressBar.setProperty("value", iter)
         progressBar.hide()
 
