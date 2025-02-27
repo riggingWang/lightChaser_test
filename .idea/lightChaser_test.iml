@@ -3,7 +3,7 @@
   <component name="NewModuleRootManager">
     <content url="file://$MODULE_DIR$" />
     <content url="file://$MODULE_DIR$/../../software/Autodesk_Maya_2020_4_Update_DEVKIT_Windows/devkitBase/devkit/other/pymel/extras/completion/py" />
-    <orderEntry type="jdk" jdkName="Maya Python 2.7 (lightChaser_test) (2)" jdkType="Python SDK" />
+    <orderEntry type="jdk" jdkName="Maya Python 2.7 (lightChaser_test)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
 </module>

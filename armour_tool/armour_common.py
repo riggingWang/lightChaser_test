@@ -39,6 +39,63 @@ def wrap(control, target):
     return wrap, baseGeo
 
 
+def curveFormEdge(control, targets):
+    cv_count = 0
+    for target_index, target in enumerate(targets):
+        cv_array =  mc.ls("{}.cv[*]".format(target), fl=True)
+        if target_index == 0:
+            cv_count = len(cv_array)
+            continue
+        if not cv_count == len(cv_array):
+            print "Different quantities"
+            return
+
+
+    curve_count = len(targets)
+    print cv_count
+    print curve_count
+    total_count = cv_count * curve_count
+
+    index_data = []
+    for i in range(curve_count):
+        it = i
+        each_curve_index_array = [i]
+        for j in range(cv_count):
+            it = it + curve_count
+            each_curve_index_array.append(it)
+        each_curve_index_array.remove(each_curve_index_array[-1])
+        index_data.append(each_curve_index_array)
+
+    for i in index_data[:3]:
+        mc.select(d=True)
+        for j in i:
+            print j
+
+            mc.select("{}.vtx[{}]".format(control, j), tgl=True)
+            mc.refresh()
+
+        mc.ConvertSelectionToContainedEdges()
+
+    return
+
+
+
+if __name__ == '__main__':
+    curveFormEdge("body_up_editMesh", [u'body_up_M_0_curveGuide_splineIK_crv_EditCurve',
+                                                   u'body_up_L_1_curveGuide_splineIK_crv_EditCurve',
+                                                   u'body_up_L_2_curveGuide_splineIK_crv_EditCurve',
+                                                   u'body_up_L_3_curveGuide_splineIK_crv_EditCurve',
+                                                   u'body_up_L_4_curveGuide_splineIK_crv_EditCurve',
+                                                   u'body_up_L_5_curveGuide_splineIK_crv_EditCurve',
+                                                   u'body_up_M_6_curveGuide_splineIK_crv_EditCurve',
+                                                   u'body_up_R_5_curveGuide_splineIK_crv_EditCurve',
+                                                   u'body_up_R_4_curveGuide_splineIK_crv_EditCurve',
+                                                   u'body_up_R_3_curveGuide_splineIK_crv_EditCurve',
+                                                   u'body_up_R_2_curveGuide_splineIK_crv_EditCurve',
+                                                   u'body_up_R_1_curveGuide_splineIK_crv_EditCurve'])
+
+
+
 def batchCopyWeights():
     selGeo = pm.ls(sl=True, fl=True)
     infJoint = pm.skinCluster(selGeo[0], q=True, inf=True)
@@ -58,6 +115,30 @@ def listHistory(obj):
     if result == None:
         result = []
     return result
+
+
+def find_skinNode(obj):
+    targetSkin = listHistory(obj)
+    targetSkin = [i for i in targetSkin if mc.nodeType(i) == "skinCluster"]
+    return targetSkin
+
+
+def get_blend_node(object):
+    array = mc.listHistory(object, pdo=True)
+    if array == None:
+        array = []
+    blend = []
+    for i in array:
+        if mc.nodeType(i) == "blendShape":
+            blend.append(i)
+    return blend
+
+def get_MObject(obj):
+    MObj = om.MObject()
+    MSel = om.MSelectionList()
+    MSel.add(obj)
+    MSel.getDependNode(0, MObj)
+    return MObj
 
 
 def copyWeights(object, target):
@@ -111,6 +192,86 @@ def addAttribute(obj, type="str", attr_name="attr", value=None):
             mc.addAttr(obj, ln=attr_name, dt="string", keyable=True)
         mc.setAttr("{}.{}".format(obj, attr_name), value, type="string")
 
+def create_polyFacet(curve, skin=True):
+    cvArray = mc.ls("{}.cv[*]".format(curve), fl=True)
+    posArray = []
+    for i in cvArray:
+        pos = mc.xform(i, q=True, ws=True, t=True)
+        posArray.append(pos)
+    temp_poly = mc.polyCreateFacet(p=posArray, s=1, ch=False, tx=1, n="{}_poly".format(curve))[0]
+    polyArray = mc.ls("{}.vtx[*]".format(temp_poly), fl=True)
+
+    if skin:
+        infJoint = mc.skinCluster(curve, q=True, inf=True)
+        curve_skin = find_skinNode(curve)[0]
+        temp_poly_skin = mc.skinCluster(infJoint, temp_poly, tsb=True)[0]
+        for i in range(len(cvArray)):
+            weights = mc.skinPercent(curve_skin, cvArray[i], query=True, value=True)
+            mc.skinPercent(temp_poly_skin, polyArray[i], tv=zip(infJoint, weights))
+    return temp_poly
+
+def get_lcPoseDeformer(object):
+    array = mc.listHistory(object, pdo=True)
+    if array == None:
+        array = []
+    blend = []
+    for i in array:
+        if mc.nodeType(i) == "lcPoseDeformer":
+            blend.append(i)
+    return blend
+
+def find_lcPoseDeformer_targetWeights(node):
+    MSel = om.MSelectionList()
+    MSel.add(node)
+    MObj = om.MObject()
+    MSel.getDependNode(0, MObj)
+    depNodeFn = om.MFnDependencyNode(MObj)  # main node
+    weightPlug = depNodeFn.findPlug("targetWeights", False)
+    indexArray = []
+    nameArray = []
+    weights = []
+    for i in range(weightPlug.numElements()):
+        elementPlug = weightPlug.elementByPhysicalIndex(i)
+        indexArray.append(i)
+        nameArray.append(elementPlug.name())
+        weights.append(elementPlug.asDouble())
+    return zip(indexArray, nameArray, weights)
+
+
+def polyToCurve(mesh):
+    point_array = mc.ls("{}.vtx[*]".format(mesh), fl=True)
+    pos_array = []
+    for i in point_array:
+        pos = mc.xform(i, q=True, ws=True, t=True)
+        pos_array.append(pos)
+    curve = mc.curve(p=pos_array, d=3, n="{}_lcaPoseDeform".format(mesh.split("_EditCurve")[0]))
+    curveShape = mc.listRelatives(curve, s=True)[0]
+    mc.delete(mesh)
+    mc.rename(curveShape, "{}Shape".format(curve))
+    return curve
+
+
+
+def orderAddBlendShapeTarget(target, object):
+    targetShape = mc.listRelatives(target, s=True)[0]
+    objectShape = mc.listRelatives(object, s=True)[0]
+    target_MObj = get_MObject(targetShape)
+    object_MObj = get_MObject(objectShape)
+    blend_array = get_blend_node(objectShape)
+    if len(blend_array) == 0:
+        blend_array = mc.blendShape(object, frontOfChain=True)
+    blendShapeMFn = oma.MFnBlendShapeDeformer(get_MObject(blend_array[0]))
+    indexList = om.MIntArray()
+    blendShapeMFn.weightIndexList(indexList)
+    if len(indexList) == 0:
+        endIndex = 0
+    else:
+        endIndex = indexList[-1] + 1
+    blendShapeMFn.addTarget(object_MObj, endIndex, target_MObj, 1)
+    return "{}.w[{}]".format(blend_array[0], endIndex)
+
+
+
 
 class copyBlendShape():
     def __init__(self):
@@ -134,14 +295,14 @@ class copyBlendShape():
 
     def copy_blendShape(self, mesh, curve):
         meshShape = mc.listRelatives(mesh, s=True)[0]
-        blend_array = self.get_blend_node(meshShape)
+        blend_array = get_blend_node(meshShape)
         if len(blend_array) == 0:
             return
         blendNode = blend_array[0]
         bsTargets = self.getBlendTargets(blendNode)
 
         curveShape = mc.listRelatives(curve, s=True)[0]
-        mc.delete(self.get_blend_node(curveShape))
+        mc.delete(get_blend_node(curveShape))
 
         for index, alias in bsTargets:
             connect_attr = mc.listConnections("{}.w[{}]".format(blendNode, index), plugs=True)
@@ -162,30 +323,13 @@ class copyBlendShape():
                 mc.connectAttr(connect_attr[0], "{}.w[{}]".format(blendNode, index))
                 mc.connectAttr(connect_attr[0], "{}.w[{}]".format(bs, index), f=True)
 
+
     def duplicate(self, obj, n):
         dup = mc.duplicate(obj, n="{}".format(n))[0]
         shape = mc.listRelatives(dup, s=True, f=True)[0]
         mc.rename(shape, "{}Shape".format(dup))
         return dup
 
-
-
-    def get_blend_node(self, object):
-        array = mc.listHistory(object, pdo=True)
-        if array == None:
-            array = []
-        blend = []
-        for i in array:
-            if mc.nodeType(i) == "blendShape":
-                blend.append(i)
-        return blend
-
-    def get_MObject(self, obj):
-        MObj = om.MObject()
-        MSel = om.MSelectionList()
-        MSel.add(obj)
-        MSel.getDependNode(0, MObj)
-        return MObj
 
     def get_MDagPath(self, obj):
         mSel = om.MSelectionList()
@@ -197,16 +341,17 @@ class copyBlendShape():
     def addBlendTargets(self, target, object, index):
         targetShape = mc.listRelatives(target, s=True)[0]
         objectShape = mc.listRelatives(object, s=True)[0]
-        target_MObj = self.get_MObject(targetShape)
-        object_MObj = self.get_MObject(objectShape)
-        blend_array = self.get_blend_node(object)
+        target_MObj = get_MObject(targetShape)
+        object_MObj = get_MObject(objectShape)
+        blend_array = get_blend_node(object)
         if len(blend_array) == 0:
             blend_array = mc.blendShape(object, frontOfChain=True)
-        bsFn = oma.MFnBlendShapeDeformer(self.get_MObject(blend_array[0]))
+        bsFn = oma.MFnBlendShapeDeformer(get_MObject(blend_array[0]))
         bsFn.removeTarget(object_MObj, index, target_MObj, 1)
         bsFn.addTarget(object_MObj, index, target_MObj, 1)
         bsFn.setWeight(index, 0)
         return bsFn.name()
+
 
 
 class EditMesh():
@@ -252,6 +397,11 @@ class EditMesh():
 
     @undo
     def deleteEditMesh(self, prefix, progressBar):
+        self.progressBar = progressBar
+        self.progressBar.setFormat("copy weights and blendShape :    %p%")
+        self.progressBar.show()
+        self.progressBar.setProperty("value", 1)
+
         editMesh = "{}_editMesh".format(prefix)
         curveEdit_grp = self.curveEdit_grp.format(prefix)
         mc.setAttr("{}.switch".format(editMesh), 0)
@@ -269,14 +419,64 @@ class EditMesh():
 
         percent = 100.0 / len(blend_object_array)
         iter = 0
-        progressBar.show()
         for i in blend_object_array:
             copyWeights(editMesh, i)
             self.copy_blend.copy_blendShape(editMesh, i)
             iter += percent
             mc.setAttr("{}.inheritsTransform".format(i), False)
-            progressBar.setProperty("value", iter)
-        progressBar.hide()
+            self.progressBar.setProperty("value", iter)
+
+        #  -------------copy lcPoseDeformer-------------
+        meshShape = mc.listRelatives(editMesh, s=True)[0]  # 找到Shape
+        lcPoseDeformerArray = get_lcPoseDeformer(meshShape)
+        if len(lcPoseDeformerArray) == 0:
+            return
+        lcPoseDeformerNode = lcPoseDeformerArray[0]  # 找到lcDeform 节点
+        lcPoseDfmWeights = find_lcPoseDeformer_targetWeights(lcPoseDeformerNode)  # 所有target
+
+        self.progressBar.setFormat("copy lcPoseDeformer :    %p%")
+        percent = 100.0 / len(lcPoseDfmWeights)
+        iter = 0
+
+        bridge_Mesh_array = []
+        for i in blend_object_array:
+            bridge_Mesh = create_polyFacet(i)  # 1.在初始pose绑定poly。  “bridge_Mesh“
+            bridge_Mesh_array.append(bridge_Mesh)
+
+        blendArray = get_blend_node(meshShape)
+        if not len(blendArray) == 0:
+            mc.setAttr("{}.envelope".format(blendArray[0]), 0)
+
+        for index, alias, value in lcPoseDfmWeights:  # 索引,名称,初始值.(each targets)  遍历28个姿势
+            print index, alias, value
+            rbfPoseNurbs = alias.split(".")[-1].split("___")[0]  # pose_*
+            ctrl = mc.getAttr("{}.ctrlName".format(rbfPoseNurbs))  # 控制器
+            rotate = mc.getAttr("{}.Rotation".format(rbfPoseNurbs))[0]  # 旋转值
+            mc.setAttr("{}.r".format(ctrl), rotate[0], rotate[1], rotate[2], type="double3")  # 2.设置pose。
+            for i in lcPoseDfmWeights:  # 关掉其余目标
+                if alias == i[1]:
+                    mc.setAttr(i[1], 1)
+                else:
+                    mc.setAttr(i[1], 0)
+            for index, curve in enumerate(blend_object_array):  # 遍历12根曲线
+                pose_mesh = create_polyFacet("{}_EditCurve".format(curve), skin=False)  # 4.查询 "TEMP_*_curveEdit_grp" 每个点的位置，并且按照每个点位置生成poly。(有pose poly)
+                inverstShape = mc.invertShape(bridge_Mesh_array[index], pose_mesh)  # 5.第一步和的第四步创建出来的poly，反减模型.
+                mc.delete(pose_mesh)
+                inverstCurve = polyToCurve(inverstShape)  # 6.按模型创建curve
+                inverstTarget = mc.rename(inverstCurve, "{}__{}_lcPD".format(curve, rbfPoseNurbs))
+                poseTarget = orderAddBlendShapeTarget(inverstTarget, curve)
+                output = mc.listConnections(alias, p=True)[0]
+                mc.connectAttr(output, poseTarget)
+                mc.delete(inverstTarget)
+
+            mc.setAttr("{}.r".format(ctrl), 0, 0, 0, type="double3")  # 2.设置pose   0。
+
+            iter += percent
+            self.progressBar.setProperty("value", iter)
+
+        mc.delete(self.edit_grp.format(prefix))
+        mc.delete(bridge_Mesh_array)
+        self.progressBar.hide()
 
     def curve_array_sort(self, curve_array):
         new_array = []
@@ -316,5 +516,4 @@ class EditMesh():
 
 
 if __name__ == '__main__':
-    cls = EditMesh()
-    cls.createEditMesh()
+    pass

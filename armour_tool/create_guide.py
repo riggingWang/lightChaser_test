@@ -582,7 +582,7 @@ class guide:
 
 
     @armour_common.undo
-    def shoulder_guide(self):
+    def shoulder_guide(self, shoudlerGuideNum):
         self.initialize_scene()
         try:
             path = os.path.normpath(os.path.join(os.path.dirname(__file__), "resources", "maya", "armourShoulder_guide.ma"))
@@ -593,6 +593,12 @@ class guide:
             return
         mc.file(path, i=1, type="mayaAscii")
         mc.parent(self.armourShoulder_grp, self.armour_rig_grp)
+        if shoudlerGuideNum < 11 and shoudlerGuideNum > 0:
+            for i in range(11):
+                if i > 0:
+                    if i > shoudlerGuideNum:
+                        mc.delete('armourSdr_L_main_{}_guide'.format(i))
+
         mc.select(d=True)
 
 
@@ -610,11 +616,8 @@ class guide:
         mc.parent(self.armourPauldrons_grp, self.armour_rig_grp)
         mc.select(d=True)
 
-        if mc.objExists("arm_L_elbow_1_bind"):
-            mc.parentConstraint("arm_L_elbow_1_bind", "armourPds_L_iKSpline_2_guide")
-
-
-
+        #if mc.objExists("arm_L_elbow_1_bind"):
+        #    mc.parentConstraint("arm_L_elbow_1_bind", "armourPds_L_iKSpline_2_guide")
 
     @armour_common.undo
     def armlet_guide(self):

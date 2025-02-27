@@ -449,17 +449,13 @@ class armour_rig_ui(QMainWindow):
             mc.warning('please select three ctrls')
 
     @Slot()
+    @armour_common.undo
     def on_ArmorPauldronsBtn_clicked(self): #new
         print('on_ArmorPauldronsBtn_clicked')
         run = armor_generate_functions.caocao_armor_setup_module('prefix', (1, 0, 0), (1, 0, 0), size=float(self._ui.ctrlScaleTextLineEdit.text()))
         selected = mc.ls(sl=1)
         if selected:
-            mc.undoInfo(openChunk=True)
-            try:
-                run.create_armor_pauldrons_setup(selected[0])
-                mc.undoInfo(closeChunk=True)
-            except Exception as e:
-                mc.undoInfo(closeChunk=True)
+            run.create_armor_pauldrons_setup(selected[0])
         else:
             mc.warning('please select generated group')
         self._ui.ArmorPauldronsBtn.setStyleSheet("background-color: green; color: white;")
@@ -588,20 +584,21 @@ class armour_rig_ui(QMainWindow):
         ProgressBar = self._ui.EditMesh_EditOverProgressBar
         confirm = mc.confirmDialog(title=u'提示',
                                    message=u'请确认控制器为归零状态\n'
+                                           u'编辑模型历史只允许存在三个节点：\n'
+                                           u'\n'
+                                           u'"skinCluster",\n'
+                                           u'"blendShape",\n'
+                                           u'"lcPoseDeformer"\n'
+                                           u'\n'
                                            u'生效后，编辑模型删除，无法恢复，你确定吗？？',
                                    button=['Confirm', 'Cancel'],
+                                   backgroundColor=[0.3, 0.2, 0.2],
                                    defaultButton='Yes', cancelButton='No', dismissString='No')
         if confirm == "Cancel":
             return
-
         currentSelect = self._ui.EditMesh_listWidget.currentItem().text()
-
         prefix = currentSelect.split("{}".format(self.EditMesh_cls.splitStr))[0]
-
         self.EditMesh_cls.deleteEditMesh(prefix, ProgressBar)
-
-
-        mc.delete(self.EditMesh_cls.edit_grp.format(prefix))
         self.EditMesh_updateBtnCmd()
 
 
