@@ -11,16 +11,13 @@ def set_zero(obj, attr, v):
     except:
         pass
 
+
 for i in sel:
-    set_zero(i, "tx", 0)
-    set_zero(i, "ty", 0)
-    set_zero(i, "tz", 0)
-    set_zero(i, "rx", 0)
-    set_zero(i, "ry", 0)
-    set_zero(i, "rz", 0)
-    set_zero(i, "sx", 1)
-    set_zero(i, "sy", 1)
-    set_zero(i, "sz", 1)
+    for j in ["tx", "ty", "tz", "rx", "ry", "rz", ]:
+        set_zero(i, j, 0)
+    for j in ["sx", "sy", "sz" ]:
+        set_zero(i, j, 1)
+
 
 
 
