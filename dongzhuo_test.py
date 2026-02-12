@@ -7,6 +7,10 @@ import maya.cmds as mc
 import maya.OpenMaya as om
 import maya.OpenMayaAnim as oma
 
+print "2026.0212"
+
+
+
 
 def listRelatives(obj, parent=True):
     if parent:

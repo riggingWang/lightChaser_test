@@ -31,10 +31,10 @@ for i in chrList:
     layout_file = r"Z:\projects\sgl\asset\chr\{0}\rig\publish\{0}.rig.rigging_layout\{0}.mb".format(i)
     ani_file = r"Z:\projects\sgl\asset\chr\{0}\rig\publish\{0}.rig.rigging\{0}.mb".format(i)
 
-    if os.path.isfile(layout_file) and ani_file:
+    if os.path.isfile(layout_file) and os.path.isfile(ani_file):
         dir_array.append([ani_file, layout_file, i])
 
-
+print len(dir_array)
 
 def export_info(*args):
     fileName = "batch_info.txt"
@@ -58,7 +58,7 @@ def export_info(*args):
 
 
 
-
+print dir_array
 
 
 for ani_file, layout_file, chr_name in dir_array[:1]:
@@ -102,7 +102,7 @@ for ani_file, layout_file, chr_name in dir_array[:1]:
                         layout_file,
                         "Animation lookPath：{}".format(ani_lookPass_list),
                         "Layout lookPath：{}".format(layout_lookPass_list),
-                        "More than: {}")
+                        "continue!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
 
             continue
 
